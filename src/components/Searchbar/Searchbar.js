@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { toast } from 'react-toastify'
 
 export class Searchbar extends Component {
   state = {
@@ -12,9 +13,9 @@ export class Searchbar extends Component {
   handleSubmit = e => {
     e.preventDefault()
 
-    if(this.state.imageTag.trim() === ''){
-      alert('Введіть пошуковий запит')
-      return;
+    if (this.state.imageTag.trim() === '') {
+      toast.info('Введіть пошуковий запит')
+      return
     }
     this.props.onSearchbarSubmit(this.state.imageTag)
     this.setState({ imageTag: '' })
