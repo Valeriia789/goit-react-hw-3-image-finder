@@ -1,17 +1,10 @@
 import React, { Component } from 'react'
 
-export class ImageGalleryItem extends Component {
-
-
-  render () {
-    return (
-
-        <li class='gallery-item'>
-          <img src='' alt='' />
-          <p>my image</p>
-          <p>{this.props}</p>
-        </li>
-
-    )
-  }
+export const ImageGalleryItem = ({ picture, tags }) => {
+  return (
+    <li class='gallery-item'>
+      <img src={picture} alt={tags} />
+      <p>{tags}</p>
+    </li>
+  )
 }
