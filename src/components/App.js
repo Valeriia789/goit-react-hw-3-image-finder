@@ -6,8 +6,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Searchbar } from './Searchbar/Searchbar'
 import { ImageGallery } from './ImageGallery/ImageGallery'
 
-const BASE_URL = 'https://pixabay.com/api/'
-const API_KEY = '19320063-cda7f2d635216fb573107b42d'
+// const BASE_URL = 'https://pixabay.com/api/'
+// const API_KEY = '19320063-cda7f2d635216fb573107b42d'
 
 export class App extends Component {
   state = {
@@ -15,7 +15,6 @@ export class App extends Component {
   }
 
   handleSearchbarSubmit = imageTag => {
-    console.log(imageTag)
     this.setState({ imageTag })
   }
 

@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem'
+import { ImageErrorView } from '../ImageErrorView/ImageErrorView'
 
 export class ImageGallery extends Component {
   state = {
     images: [],
-    loading: false,
-    error: false
+    error: false,
+    status: 'idle'
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -13,46 +14,52 @@ export class ImageGallery extends Component {
     const nextTag = this.props.imageTag
 
     if (prevTag !== nextTag) {
-      this.setState({ loading: true, images: [] })
+      this.setState({ status: 'pending' })
 
       fetch(
-        `https://pixabay.com/api/?key=19320063-cda7f2d635216fb573107b42d&q=yellow+flowers&image_type=photo`
+        `https://pixabay.com/api/?key=19320063-cda7f2d635216fb573107b42d&q=${nextTag}&image_type=photo`
       )
         .then(response => {
           if (response.ok) {
             return response.json()
           }
           return Promise.reject(
-            new Error(`No images were found for the request ${nextTag}`)
-          )
+            new Error(`No images were found with tags ${nextTag}`))
         })
-        .then(images => this.setState({ images: images.hits }))
-        .catch(error => this.setState({ error }))
-        .finally(() => this.setState({ loading: false }))
+        .then(images =>
+          this.setState({ images: images.hits, status: 'resolved' })
+        )
+        .catch(error => this.setState({ error, status: 'rejected' }))
     }
   }
 
   render () {
-    const { images, loading, error } = this.state
-    const { imageTag } = this.props
+    const { images, error, status } = this.state
 
-    return (
-      <>
-        {error && <p>Ooops...{error.message}</p>}
-        {loading && <p>Loading...</p>}
-        {!imageTag && <p>Введіть пошуковий запит</p>}
-        {this.state.images && (
-          <ul class='gallery'>
-            {images.map(image => (
-              <ImageGalleryItem
-                key={image.id}
-                picture={image.previewURL}
-                tags={image.tags}
-              />
-            ))}
-          </ul>
-        )}
-      </>
-    )
+    if (status === 'idle') {
+      return <p>Введіть пошуковий запит</p>
+    }
+
+    if (status === 'pending') {
+      return <p>Loading...</p>
+    }
+
+    if (status === 'rejected') {
+      return <ImageErrorView message={error.message} />
+    }
+
+    if (status === 'resolved') {
+      return (
+        <ul class='gallery'>
+          {images.map(image => (
+            <ImageGalleryItem
+              key={image.id}
+              picture={image.previewURL}
+              tags={image.tags}
+            />
+          ))}
+        </ul>
+      )
+    }
   }
 }
