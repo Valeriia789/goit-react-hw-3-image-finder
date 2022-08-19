@@ -24,7 +24,8 @@ export class ImageGallery extends Component {
             return response.json()
           }
           return Promise.reject(
-            new Error(`No images were found with tags ${nextTag}`))
+            new Error(`No images were found with tags ${nextTag}`)
+          )
         })
         .then(images =>
           this.setState({ images: images.hits, status: 'resolved' })
