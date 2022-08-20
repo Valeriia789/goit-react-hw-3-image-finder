@@ -5,17 +5,28 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { Searchbar } from './Searchbar/Searchbar'
 import { ImageGallery } from './ImageGallery/ImageGallery'
+import LoadMore from './Loader/Loader'
 
 // const BASE_URL = 'https://pixabay.com/api/'
 // const API_KEY = '19320063-cda7f2d635216fb573107b42d'
 
 export class App extends Component {
   state = {
-    imageTag: ''
+    images: [],
+    searchQuery: '',
+    page: 1
   }
 
-  handleSearchbarSubmit = imageTag => {
-    this.setState({ imageTag })
+  handleSearchbarSubmit = searchQuery => {
+    this.setState({ searchQuery })
+  }
+
+  handleLoadMoreClick = page => {
+    this.setState({ page })
+  }
+
+  getImages = images => {
+    this.setState({ images })
   }
 
   render () {
@@ -26,8 +37,13 @@ export class App extends Component {
           {this.state.images && <div>{this.state.images.likes}</div>} */}
         </div>
         <Searchbar onSearchbarSubmit={this.handleSearchbarSubmit} />
-        <ImageGallery imageTag={this.state.imageTag} />
+        <ImageGallery
+          searchQuery={this.state.searchQuery}
+          page={this.state.page}
+          onGetImages={this.getImages}
+        />
         <ToastContainer autoClose={5000} />
+        <LoadMore onHandleLoadMoreClick={this.handleLoadMoreClick} />
       </div>
     )
   }

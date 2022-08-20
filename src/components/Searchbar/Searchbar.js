@@ -3,22 +3,22 @@ import { toast } from 'react-toastify'
 
 export class Searchbar extends Component {
   state = {
-    imageTag: ''
+    searchQuery: '',
   }
 
-  handleTagChange = e => {
-    this.setState({ imageTag: e.currentTarget.value.toLowerCase() })
+  handleQueryChange = e => {
+    this.setState({ searchQuery: e.currentTarget.value.toLowerCase() })
   }
 
   handleSubmit = e => {
     e.preventDefault()
 
-    if (this.state.imageTag.trim() === '') {
+    if (this.state.searchQuery.trim() === '') {
       toast.info('Введіть пошуковий запит')
       return
     }
-    this.props.onSearchbarSubmit(this.state.imageTag)
-    this.setState({ imageTag: '' })
+    this.props.onSearchbarSubmit(this.state.searchQuery)
+    this.setState({ searchQuery: '' })
   }
 
   render () {
@@ -31,9 +31,9 @@ export class Searchbar extends Component {
             </button>
 
             <input
-              name='imageTag'
-              value={this.state.imageTag}
-              onChange={this.handleTagChange}
+              name='searchQuery'
+              value={this.state.searchQuery}
+              onChange={this.handleQueryChange}
               class='input'
               type='text'
               autoComplete='off'
