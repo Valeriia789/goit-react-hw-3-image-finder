@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import Searchbar from './Searchbar/Searchbar'
 import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
+import ImageErrorView from './ImageErrorView/ImageErrorView'
 
 const API_KEY = '19320063-cda7f2d635216fb573107b42d'
 export default class App extends React.Component {
@@ -14,7 +15,7 @@ export default class App extends React.Component {
     page: 1,
     searchQuery: '',
     isLoading: false,
-    error: false
+    error: null
   }
 
   componentDidMount () {
@@ -46,7 +47,7 @@ export default class App extends React.Component {
         images: [...prevState.images, ...response.data.hits]
       }))
     } catch (error) {
-      this.setState({ error: error.true })
+      this.setState({ error })
     } finally {
       this.setState({ isLoading: false })
     }
