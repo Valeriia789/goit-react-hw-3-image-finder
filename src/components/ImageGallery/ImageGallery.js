@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem'
 import { ImageErrorView } from '../ImageErrorView/ImageErrorView'
+import searchQueryApi from '../../services/searchQueryApi'
 
 export class ImageGallery extends Component {
   state = {
@@ -21,17 +22,9 @@ export class ImageGallery extends Component {
     if (prevPage !== nextPage || prevQuery !== nextQuery) {
       this.setState({ status: 'pending' })
 
-      fetch(
-        `https://pixabay.com/api/?key=19320063-cda7f2d635216fb573107b42d&q=${nextQuery}&image_type=photo&orientation=horizontal&page=${nextPage}&per_page=3`
-      )
-        .then(response => {
-          if (response.ok) {
-            return response.json()
-          }
-          return Promise.reject(
-            new Error(`No images were found with tags ${nextQuery}`)
-          )
-        })
+      searchQueryApi
+        .fetchQuery(nextQuery, nextPage)
+        
         .then(images =>
           this.setState({ images: images.hits, status: 'resolved' })
         )
