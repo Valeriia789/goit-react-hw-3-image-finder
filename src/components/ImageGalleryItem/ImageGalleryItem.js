@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 
-export const ImageGalleryItem = ({ picture, tags }) => {
+const ImageGalleryItem = ({ previewURL, tags }) => {
   return (
-    <li class='gallery-item'>
-      <img src={picture} alt={tags} />
+    <li>
+      <img src={previewURL} alt={tags} />
     </li>
   )
 }
+
+export default ImageGalleryItem

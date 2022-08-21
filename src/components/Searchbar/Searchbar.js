@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { toast } from 'react-toastify'
 
-export class Searchbar extends Component {
+class Searchbar extends Component {
   state = {
-    searchQuery: '',
+    searchQuery: ''
   }
 
   handleQueryChange = e => {
@@ -17,24 +17,23 @@ export class Searchbar extends Component {
       toast.info('Введіть пошуковий запит')
       return
     }
-    this.props.onSearchbarSubmit(this.state.searchQuery)
+    this.props.onSubmit(this.state.searchQuery)
     this.setState({ searchQuery: '' })
   }
 
   render () {
     return (
       <>
-        <header class='searchbar'>
-          <form class='form' onSubmit={this.handleSubmit}>
-            <button type='submit' class='button'>
-              <span class='button-label'>Search</span>
+        <header>
+          <form onSubmit={this.handleSubmit}>
+            <button type='submit'>
+              <span>Search</span>
             </button>
 
             <input
               name='searchQuery'
               value={this.state.searchQuery}
               onChange={this.handleQueryChange}
-              class='input'
               type='text'
               autoComplete='off'
               autoFocus
@@ -46,3 +45,5 @@ export class Searchbar extends Component {
     )
   }
 }
+
+export default Searchbar
