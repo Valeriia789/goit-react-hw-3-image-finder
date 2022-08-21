@@ -1,4 +1,3 @@
-import React, { Component } from 'react'
 import axios from 'axios'
 
 const API_KEY = '19320063-cda7f2d635216fb573107b42d'

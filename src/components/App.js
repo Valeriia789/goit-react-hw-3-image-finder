@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import axios from 'axios'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import Searchbar from './Searchbar/Searchbar'
 import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
-import ImageErrorView from './ImageErrorView/ImageErrorView'
+// import ImageErrorView from './ImageErrorView/ImageErrorView'
 
 const API_KEY = '19320063-cda7f2d635216fb573107b42d'
 export default class App extends React.Component {
@@ -64,7 +64,7 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { images, isLoading, error } = this.state
+    const { images, isLoading } = this.state
 
     return (
       <>
