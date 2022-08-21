@@ -33,25 +33,23 @@ export default class App extends React.Component {
     }
   }
 
-  loadImages = () => {
-    const { page, searchQuery } = this.state
-    this.setState({ isLoading: true })
-    axios
-      .get(
+  loadImages = async () => {
+    try {
+      const { page, searchQuery } = this.state
+      this.setState({ isLoading: true })
+
+      const response = await axios.get(
         `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&image_type=photo&page=${page}&per_page=3`
       )
-      .then(response => {
-        this.setState(
-          // { images: response.data.hits } - показується лише нова порція зображень
-          prevState => ({
-            images: [...prevState.images, ...response.data.hits]
-          })
-        )
-      })
-      .catch(error => this.setState({ error: error.true }))
-      .finally(() => {
-        this.setState({ isLoading: false })
-      })
+
+      this.setState(prevState => ({
+        images: [...prevState.images, ...response.data.hits]
+      }))
+    } catch (error) {
+      this.setState({ error: error.true })
+    } finally {
+      this.setState({ isLoading: false })
+    }
   }
 
   handleSearchbarSubmit = searchQuery => {
@@ -66,7 +64,6 @@ export default class App extends React.Component {
 
   render () {
     const { images, isLoading, error } = this.state
-    console.log(images)
 
     return (
       <>
