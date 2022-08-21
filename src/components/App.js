@@ -53,7 +53,7 @@ export default class App extends React.Component {
     }
   }
 
-  handleSearchbarSubmit = searchQuery => {
+  handleSearchbarSubmit = (searchQuery) => {
     this.setState({ searchQuery })
   }
 
