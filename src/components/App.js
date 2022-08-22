@@ -48,7 +48,7 @@ export default class App extends Component {
   }
 
   handleSearchbarSubmit = searchQuery => {
-    this.setState({ searchQuery })
+    this.setState({ searchQuery, page: 1, images: [] })
   }
 
   loadMore = () => {
