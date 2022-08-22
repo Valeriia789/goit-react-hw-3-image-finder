@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PureComponent, Component} from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -9,7 +9,7 @@ import * as API from './getImagesApi'
 // import ImageErrorView from './ImageErrorView/ImageErrorView'
 import Modal from './Modal/Modal'
 
-export default class App extends React.Component {
+export default class App extends Component {
   state = {
     images: [],
     page: 1,
@@ -77,11 +77,13 @@ export default class App extends React.Component {
       <>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
         <ImageGallery images={images} showModal={showModal} />
-        {images.length !== 0 && <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />}
+        {images.length !== 0 && (
+          <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />
+        )}
 
         {showModal && (
           <Modal onCloseModal={this.toggleModal}>
-            <p>childrens from Modal</p>
+            <p>children from Modal</p>
           </Modal>
         )}
         <button onClick={this.toggleModal}>open modal</button>
