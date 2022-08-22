@@ -7,6 +7,7 @@ import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
 import * as API from './getImagesApi'
 // import ImageErrorView from './ImageErrorView/ImageErrorView'
+import Modal from './Modal/Modal'
 
 export default class App extends React.Component {
   state = {
@@ -14,7 +15,8 @@ export default class App extends React.Component {
     page: 1,
     searchQuery: '',
     isLoading: false,
-    error: false
+    error: false,
+    showModal: false
   }
 
   // async componentDidMount () {
@@ -62,15 +64,28 @@ export default class App extends React.Component {
     }))
   }
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal
+    }))
+  }
+
   render () {
-    const { images, isLoading } = this.state
+    const { images, showModal, isLoading } = this.state
 
     return (
       <>
-        <Searchbar onSubmit={this.handleSearchbarSubmit} />
-        <ImageGallery images={images} />
-        {images.length !== 0 && <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />}
+        {/* <Searchbar onSubmit={this.handleSearchbarSubmit} />
+        <ImageGallery images={images} showModal={showModal} />
+        {images.length !== 0 && <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />} */}
 
+        {showModal && (
+          <Modal>
+            <p>childrens from Modal</p>
+            <button onClick={this.toggleModal}>close modal</button>
+          </Modal>
+        )}
+        <button onClick={this.toggleModal}>open modal</button>
         <ToastContainer autoClose={5000} />
       </>
     )
