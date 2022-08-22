@@ -1,3 +1,5 @@
+import React from 'react'
+
 const LoadMoreBtn = ({ isLoading, handleLoadMore }) => {
   return (
     <button type='button' onClick={handleLoadMore}>

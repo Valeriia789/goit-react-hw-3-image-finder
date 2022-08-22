@@ -1,3 +1,4 @@
+import React from 'react'
 import errorImage from './error1.jpg'
 import errorAltImage from './error2.jpg'
 
