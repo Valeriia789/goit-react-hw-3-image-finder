@@ -27,21 +27,14 @@ export default class App extends Component {
     const prevQuery = prevState.searchQuery
     const nextQuery = this.state.searchQuery
 
-    // При натисканні на кнопку Load more
-    // повинна довантажуватись наступна порція зображень
-    //  і рендеритися разом із попередніми. Реалізувала так:
     if (prevPage !== nextPage) {
       this.setState(prevState => ({
         images: [...prevState.images, ...images]
       }))
     }
 
-    // при новому Query намагаюсь рендерити лише нову порцію зображень,
-    // параметр per_page=3, але при першому запиті рендериться 6 зображень,
-    // далі - по 3, як і має бути
     if (prevQuery !== nextQuery) {
       this.setState({
-        page: 1,
         images: images
       })
     }
