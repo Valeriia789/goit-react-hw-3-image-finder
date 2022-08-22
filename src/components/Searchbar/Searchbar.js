@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import { toast } from 'react-toastify'
 
+import {
+  SearchbarContainer,
+  SearchForm,
+  SearchFormButton,
+  SearchFormButtonLabel,
+  SearchFormInput
+} from './Searchbar.styled'
+
 class Searchbar extends Component {
   state = {
     searchQuery: ''
@@ -24,14 +32,14 @@ class Searchbar extends Component {
 
   render () {
     return (
-      <>
+      <SearchbarContainer>
         <header>
-          <form onSubmit={this.handleSubmit}>
-            <button type='submit'>
-              <span>Search</span>
-            </button>
+          <SearchForm onSubmit={this.handleSubmit}>
+            <SearchFormButton type='submit'>
+              <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+            </SearchFormButton>
 
-            <input
+            <SearchFormInput
               name='searchQuery'
               value={this.state.searchQuery}
               onChange={this.handleQueryChange}
@@ -40,9 +48,9 @@ class Searchbar extends Component {
               autoFocus
               placeholder='Search images and photos'
             />
-          </form>
+          </SearchForm>
         </header>
-      </>
+      </SearchbarContainer>
     )
   }
 }

@@ -1,10 +1,11 @@
 import React from 'react'
+import { Button } from './Button.styled'
 
 const LoadMoreBtn = ({ isLoading, handleLoadMore }) => {
   return (
-    <button type='button' onClick={handleLoadMore}>
+    <Button type='button' onClick={handleLoadMore}>
       {isLoading ? 'Loading...' : 'Load More'}
-    </button>
+    </Button>
   )
 }
 

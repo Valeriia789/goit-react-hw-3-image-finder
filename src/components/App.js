@@ -8,6 +8,8 @@ import LoadMoreBtn from './Button/Button'
 import * as API from './getImagesApi'
 // import ImageErrorView from './ImageErrorView/ImageErrorView'
 
+import {AppContainer} from './App.styled'
+
 export default class App extends Component {
   state = {
     images: [],
@@ -17,7 +19,7 @@ export default class App extends Component {
     error: false
   }
 
-  async componentDidUpdate (prevProps, prevState) {
+  async componentDidUpdate (_, prevState) {
     const { searchQuery, page } = this.state
     const images = await API.getImages(searchQuery, page)
 
@@ -54,7 +56,7 @@ export default class App extends Component {
     const { images, isLoading } = this.state
 
     return (
-      <>
+      <AppContainer>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
         <ImageGallery images={images} />
         {images.length !== 0 && (
@@ -62,7 +64,7 @@ export default class App extends Component {
         )}
 
         <ToastContainer autoClose={5000} />
-      </>
+      </AppContainer>
     )
   }
 }
