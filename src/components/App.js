@@ -1,14 +1,18 @@
 import React, { PureComponent, Component } from 'react'
+import axios from 'axios'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { BallTriangle } from 'react-loader-spinner'
 
 import Searchbar from './Searchbar/Searchbar'
 import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
 import * as API from './getImagesApi'
-// import ImageErrorView from './ImageErrorView/ImageErrorView'
+import ImageErrorView from './ImageErrorView/ImageErrorView'
 
-import {AppContainer} from './App.styled'
+import { AppContainer } from './App.styled'
+
+const API_KEY = '19320063-cda7f2d635216fb573107b42d'
 
 export default class App extends Component {
   state = {
@@ -19,9 +23,22 @@ export default class App extends Component {
     error: false
   }
 
-  async componentDidUpdate (_, prevState) {
+  getImages = async () => {
     const { searchQuery, page } = this.state
-    const images = await API.getImages(searchQuery, page)
+    try {
+      const response = await axios.get(
+        `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&image_type=photo&page=${page}&per_page=12`
+      )
+      return response.data.hits
+    } catch (error) {
+      return Promise.reject(
+        new Error(`No images were found for the request ${searchQuery}`)
+      )
+    }
+  }
+
+  async componentDidUpdate (_, prevState) {
+    const images = await this.getImages()
 
     const prevPage = prevState.page
     const nextPage = this.state.page
@@ -31,12 +48,14 @@ export default class App extends Component {
 
     if (prevPage !== nextPage) {
       this.setState(prevState => ({
+        loading: true,
         images: [...prevState.images, ...images]
       }))
     }
 
     if (prevQuery !== nextQuery) {
       this.setState({
+        loading: true,
         images: images
       })
     }
@@ -48,21 +67,27 @@ export default class App extends Component {
 
   loadMore = () => {
     this.setState(prevState => ({
+      loading: true,
       page: prevState.page + 1
     }))
   }
 
   render () {
-    const { images, isLoading } = this.state
+    const { images, isLoading, error } = this.state
 
     return (
       <AppContainer>
+        {error && <ImageErrorView message={error.message} />}
+        {isLoading && <BallTriangle />}
+
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
+
         <ImageGallery images={images} />
         {images.length !== 0 && (
           <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />
         )}
 
+        <BallTriangle />
         <ToastContainer autoClose={5000} />
       </AppContainer>
     )
