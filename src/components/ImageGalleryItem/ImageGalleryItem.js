@@ -1,9 +1,9 @@
 import React from 'react'
 
-const ImageGalleryItem = ({ previewURL, tags }) => {
+const ImageGalleryItem = ({ webformatURL, tags }) => {
   return (
     <li>
-      <img src={previewURL} alt={tags} />
+      <img src={webformatURL} alt={tags} />
     </li>
   )
 }

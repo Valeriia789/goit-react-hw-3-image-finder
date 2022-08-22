@@ -75,14 +75,13 @@ export default class App extends React.Component {
 
     return (
       <>
-        {/* <Searchbar onSubmit={this.handleSearchbarSubmit} />
+        <Searchbar onSubmit={this.handleSearchbarSubmit} />
         <ImageGallery images={images} showModal={showModal} />
-        {images.length !== 0 && <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />} */}
+        {images.length !== 0 && <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />}
 
         {showModal && (
-          <Modal>
+          <Modal onCloseModal={this.toggleModal}>
             <p>childrens from Modal</p>
-            <button onClick={this.toggleModal}>close modal</button>
           </Modal>
         )}
         <button onClick={this.toggleModal}>open modal</button>
