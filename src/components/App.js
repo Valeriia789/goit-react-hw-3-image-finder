@@ -1,59 +1,58 @@
 import React from 'react'
-import axios from 'axios'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import Searchbar from './Searchbar/Searchbar'
 import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
+import * as API from './getImagesApi'
 // import ImageErrorView from './ImageErrorView/ImageErrorView'
 
-const API_KEY = '19320063-cda7f2d635216fb573107b42d'
 export default class App extends React.Component {
   state = {
     images: [],
     page: 1,
     searchQuery: '',
     isLoading: false,
-    error: null
+    error: false
   }
 
-  componentDidMount () {
-    // this.loadImages()
-  }
+  // async componentDidMount () {
+  //   try {
+  //     this.setState({ isLoading: true })
+  //     const images = await API.getImages()
+  //     this.setState({ images, isLoading: false })
+  //   } catch (error) {
+  //     this.setState({ error: true, isLoading: false })
+  //     console.log(error)
+  //   }
+  // }
 
-  componentDidUpdate (prevProps, prevState) {
+  async componentDidUpdate (prevProps, prevState) {
+    const { searchQuery, page } = this.state
+    const images = await API.getImages(searchQuery, page)
+
     const prevPage = prevState.page
-    const currentPage = this.state.page
+    const nextPage = this.state.page
 
     const prevQuery = prevState.searchQuery
     const nextQuery = this.state.searchQuery
 
-    if (prevPage !== currentPage || prevQuery !== nextQuery) {
-      this.loadImages()
-    }
-  }
-
-  loadImages = async () => {
-    try {
-      const { page, searchQuery } = this.state
-      this.setState({ isLoading: true })
-
-      const response = await axios.get(
-        `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&image_type=photo&page=${page}&per_page=3`
-      )
-
+    if (prevPage !== nextPage) {
       this.setState(prevState => ({
-        images: [...prevState.images, ...response.data.hits]
+        images: [...prevState.images, ...images]
       }))
-    } catch (error) {
-      this.setState({ error })
-    } finally {
-      this.setState({ isLoading: false })
+    }
+
+    if (prevQuery !== nextQuery) {
+      this.setState({
+        page: 1,
+        images: images
+      })
     }
   }
 
-  handleSearchbarSubmit = (searchQuery) => {
+  handleSearchbarSubmit = searchQuery => {
     this.setState({ searchQuery })
   }
 
@@ -70,7 +69,7 @@ export default class App extends React.Component {
       <>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
         <ImageGallery images={images} />
-        <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />
+        {images.length !== 0 && <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />}
 
         <ToastContainer autoClose={5000} />
       </>
