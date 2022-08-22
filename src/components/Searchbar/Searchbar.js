@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 
 class Searchbar extends Component {
   state = {
-    searchQuery: '',
+    searchQuery: ''
   }
 
   handleQueryChange = e => {
@@ -18,7 +18,7 @@ class Searchbar extends Component {
       return
     }
 
-    this.props.onSubmit(this.state.searchQuery )
+    this.props.onSubmit(this.state.searchQuery)
     this.setState({ searchQuery: '' })
   }
 

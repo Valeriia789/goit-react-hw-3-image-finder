@@ -1,4 +1,4 @@
-import React, {PureComponent, Component} from 'react'
+import React, { PureComponent, Component } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -7,7 +7,6 @@ import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
 import * as API from './getImagesApi'
 // import ImageErrorView from './ImageErrorView/ImageErrorView'
-import Modal from './Modal/Modal'
 
 export default class App extends Component {
   state = {
@@ -15,20 +14,8 @@ export default class App extends Component {
     page: 1,
     searchQuery: '',
     isLoading: false,
-    error: false,
-    showModal: false
+    error: false
   }
-
-  // async componentDidMount () {
-  //   try {
-  //     this.setState({ isLoading: true })
-  //     const images = await API.getImages()
-  //     this.setState({ images, isLoading: false })
-  //   } catch (error) {
-  //     this.setState({ error: true, isLoading: false })
-  //     console.log(error)
-  //   }
-  // }
 
   async componentDidUpdate (prevProps, prevState) {
     const { searchQuery, page } = this.state
@@ -40,12 +27,18 @@ export default class App extends Component {
     const prevQuery = prevState.searchQuery
     const nextQuery = this.state.searchQuery
 
+    // При натисканні на кнопку Load more
+    // повинна довантажуватись наступна порція зображень
+    //  і рендеритися разом із попередніми. Реалізувала так:
     if (prevPage !== nextPage) {
       this.setState(prevState => ({
         images: [...prevState.images, ...images]
       }))
     }
 
+    // при новому Query намагаюсь рендерити лише нову порцію зображень,
+    // параметр per_page=3, але при першому запиті рендериться 6 зображень,
+    // далі - по 3, як і має бути
     if (prevQuery !== nextQuery) {
       this.setState({
         page: 1,
@@ -64,31 +57,30 @@ export default class App extends Component {
     }))
   }
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal
-    }))
-  }
-
   render () {
-    const { images, showModal, isLoading } = this.state
+    const { images, isLoading } = this.state
 
     return (
       <>
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
-        <ImageGallery images={images} showModal={showModal} />
+        <ImageGallery images={images} />
         {images.length !== 0 && (
           <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />
         )}
 
-        {showModal && (
-          <Modal onCloseModal={this.toggleModal}>
-            <p>children from Modal</p>
-          </Modal>
-        )}
-        <button onClick={this.toggleModal}>open modal</button>
         <ToastContainer autoClose={5000} />
       </>
     )
   }
 }
+
+// async componentDidMount () {
+//   try {
+//     this.setState({ isLoading: true })
+//     const images = await API.getImages()
+//     this.setState({ images, isLoading: false })
+//   } catch (error) {
+//     this.setState({ error: true, isLoading: false })
+//     console.log(error)
+//   }
+// }
