@@ -4,10 +4,10 @@ import { ImageGalleryList } from './ImageGallery.styled'
 
 const ImageGallery = ({ images }) => {
   return (
-    <ImageGalleryList>
-      {images &&
-        images.map(image => <ImageGalleryItem key={image.id} {...image} />)}
-    </ImageGalleryList>
+      <ImageGalleryList>
+        {images &&
+          images.map(image => <ImageGalleryItem key={image.id} {...image} />)}
+      </ImageGalleryList>
   )
 }
 
