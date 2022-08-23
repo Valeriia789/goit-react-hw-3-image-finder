@@ -29,7 +29,7 @@ export default class App extends Component {
     const nextQuery = this.state.searchQuery
 
     fetch(
-      `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&image_type=photo&page=${page}&per_page=12`
+      `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&image_type=photo&page=${page}&per_page=3`
     )
       .then(response => response.json())
       .then(
@@ -61,7 +61,7 @@ export default class App extends Component {
   }
 
   handleSearchbarSubmit = searchQuery => {
-    this.setState({ searchQuery })
+    this.setState({ searchQuery, page: 1, images: [], isLoading: false })
   }
 
   loadMore = () => {
@@ -71,13 +71,13 @@ export default class App extends Component {
     }))
   }
 
-  resetState = () => {
-    this.setState({
-      page: 1,
-      images: [],
-      isLoading: false,
-    })
-  }
+  // resetState = () => {
+  //   this.setState({
+  //     page: 1,
+  //     images: [],
+  //     isLoading: false
+  //   })
+  // }
 
   render () {
     const { images, isLoading, error } = this.state
@@ -85,10 +85,7 @@ export default class App extends Component {
     return (
       <AppContainer>
         {error && <ImageErrorView message={error.message} />}
-        <Searchbar
-          onSubmit={this.handleSearchbarSubmit}
-          // resetState={this.resetState}
-        />
+        <Searchbar onSubmit={this.handleSearchbarSubmit} />
         {isLoading && <Loader />}
         <ImageGallery images={images} />
         {images.length !== 0 && (
