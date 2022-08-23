@@ -1,17 +1,14 @@
 import React, { PureComponent, Component } from 'react'
-import axios from 'axios'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { BallTriangle } from 'react-loader-spinner'
 
 import Searchbar from './Searchbar/Searchbar'
 import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
-import * as API from './getImagesApi'
 import ImageErrorView from './ImageErrorView/ImageErrorView'
+import Loader from './Loader/Loader'
 
 import { AppContainer } from './App.styled'
-
 const API_KEY = '19320063-cda7f2d635216fb573107b42d'
 
 export default class App extends Component {
@@ -20,54 +17,55 @@ export default class App extends Component {
     page: 1,
     searchQuery: '',
     isLoading: false,
-    error: false
+    error: null
   }
 
-  getImages = async () => {
+  componentDidUpdate (_, prevState) {
     const { searchQuery, page } = this.state
-    try {
-      const response = await axios.get(
-        `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&image_type=photo&page=${page}&per_page=12`
-      )
-      return response.data.hits
-    } catch (error) {
-      return Promise.reject(
-        new Error(`No images were found for the request ${searchQuery}`)
-      )
-    }
-  }
-
-  async componentDidUpdate (_, prevState) {
-    const images = await this.getImages()
 
     const prevPage = prevState.page
     const nextPage = this.state.page
-
     const prevQuery = prevState.searchQuery
     const nextQuery = this.state.searchQuery
 
-    if (prevPage !== nextPage) {
-      this.setState(prevState => ({
-        loading: true,
-        images: [...prevState.images, ...images]
-      }))
-    }
-
-    if (prevQuery !== nextQuery) {
-      this.setState({
-        loading: true,
-        images: images
-      })
-    }
+    fetch(
+      `https://pixabay.com/api/?key=${API_KEY}&q=${searchQuery}&image_type=photo&page=${page}&per_page=12`
+    )
+      .then(response => response.json())
+      .then(
+        result => {
+          if (prevQuery !== nextQuery) {
+            this.setState({
+              images: [...result.hits],
+              isLoading: false
+            })
+          }
+          if (prevPage !== nextPage) {
+            this.setState(prevState => ({
+              isLoading: false,
+              images: [...prevState.images, ...result.hits]
+            }))
+          }
+        },
+        // Примітка: важливо обробляти помилки саме тут,
+        // а не в блоці catch (), щоб не перехоплювати
+        // виключення з помилок в самих компонентах.
+        error => {
+          this.setState({
+            isLoading: true,
+            error
+          })
+        }
+      )
   }
 
   handleSearchbarSubmit = searchQuery => {
-    this.setState({ searchQuery, page: 1, images: [] })
+    this.setState({ searchQuery, page: 1, images: [], isLoading: true })
   }
 
   loadMore = () => {
     this.setState(prevState => ({
-      loading: true,
+      isLoading: true,
       page: prevState.page + 1
     }))
   }
@@ -78,29 +76,14 @@ export default class App extends Component {
     return (
       <AppContainer>
         {error && <ImageErrorView message={error.message} />}
-        {isLoading && <BallTriangle />}
-
         <Searchbar onSubmit={this.handleSearchbarSubmit} />
-
+        {isLoading && <Loader />}
         <ImageGallery images={images} />
         {images.length !== 0 && (
-          <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.loadMore} />
+          <LoadMoreBtn isLoading={isLoading} loadMore={this.loadMore} />
         )}
-
-        <BallTriangle />
         <ToastContainer autoClose={5000} />
       </AppContainer>
     )
   }
 }
-
-// async componentDidMount () {
-//   try {
-//     this.setState({ isLoading: true })
-//     const images = await API.getImages()
-//     this.setState({ images, isLoading: false })
-//   } catch (error) {
-//     this.setState({ error: true, isLoading: false })
-//     console.log(error)
-//   }
-// }
