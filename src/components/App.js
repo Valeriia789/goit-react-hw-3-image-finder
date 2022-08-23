@@ -36,6 +36,7 @@ export default class App extends Component {
         result => {
           if (prevQuery !== nextQuery) {
             this.setState({
+              page: 1,
               images: [...result.hits],
               isLoading: false
             })
@@ -60,7 +61,7 @@ export default class App extends Component {
   }
 
   handleSearchbarSubmit = searchQuery => {
-    this.setState({ searchQuery, page: 1, images: [], isLoading: true })
+    this.setState({ searchQuery })
   }
 
   loadMore = () => {
@@ -70,13 +71,24 @@ export default class App extends Component {
     }))
   }
 
+  resetState = () => {
+    this.setState({
+      page: 1,
+      images: [],
+      isLoading: false,
+    })
+  }
+
   render () {
     const { images, isLoading, error } = this.state
 
     return (
       <AppContainer>
         {error && <ImageErrorView message={error.message} />}
-        <Searchbar onSubmit={this.handleSearchbarSubmit} />
+        <Searchbar
+          onSubmit={this.handleSearchbarSubmit}
+          // resetState={this.resetState}
+        />
         {isLoading && <Loader />}
         <ImageGallery images={images} />
         {images.length !== 0 && (

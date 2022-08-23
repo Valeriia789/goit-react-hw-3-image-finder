@@ -20,7 +20,7 @@ class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-
+    // this.props.resetState()
     if (this.state.searchQuery.trim() === '') {
       toast.info('Введіть пошуковий запит')
       return
