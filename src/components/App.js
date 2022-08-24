@@ -2,6 +2,7 @@ import React, { PureComponent, Component } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import getImages from '../services'
 import Searchbar from './Searchbar/Searchbar'
 import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
@@ -22,6 +23,9 @@ export default class App extends Component {
 
   componentDidUpdate (_, prevState) {
     const { searchQuery, page } = this.state
+
+    // const fetchedImg = getImages(searchQuery, page)
+    // console.log(fetchedImg)
 
     const prevPage = prevState.page
     const nextPage = this.state.page
@@ -44,7 +48,7 @@ export default class App extends Component {
           if (prevPage !== nextPage) {
             this.setState(prevState => ({
               isLoading: false,
-              images: [ ...prevState.images, ...result.hits]
+              images: [...prevState.images, ...result.hits]
             }))
           }
         },
@@ -67,7 +71,7 @@ export default class App extends Component {
   handleLoadMore = () => {
     this.setState(prevState => ({
       isLoading: true,
-      page: prevState.page + 1,
+      page: prevState.page + 1
     }))
   }
 
@@ -83,12 +87,18 @@ export default class App extends Component {
 
     return (
       <AppContainer>
-        {error && <ImageErrorView message={'Ooops, something went wrong'}/>}
-        <Searchbar onSearchbarSubmit={this.handleSearchbarSubmit} onResetGallery={this.handleResetGallery}/>
+        {error && <ImageErrorView message={'Ooops, something went wrong'} />}
+        <Searchbar
+          onSearchbarSubmit={this.handleSearchbarSubmit}
+          onResetGallery={this.handleResetGallery}
+        />
         {isLoading && <Loader />}
         <ImageGallery images={images} />
         {images.length !== 0 && (
-          <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.handleLoadMore} />
+          <LoadMoreBtn
+            isLoading={isLoading}
+            handleLoadMore={this.handleLoadMore}
+          />
         )}
         <ToastContainer autoClose={5000} />
       </AppContainer>
