@@ -1,11 +1,11 @@
 import React from 'react'
 import errorImage from './error1.jpg'
 
-const ImageErrorView = ({ message }) => {
+const ImageErrorView = () => {
   return (
     <div role='alert'>
-      <img src={errorImage} alt='Ooops, something went wrong' />
-      <p>{message}</p>
+      <img src={errorImage} alt='' />
+      <p>Ooops, something went wrong</p>
     </div>
   )
 }

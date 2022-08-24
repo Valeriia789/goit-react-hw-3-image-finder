@@ -25,7 +25,7 @@ class Searchbar extends Component {
       return
     }
 
-    this.props.onSubmit(this.state.searchQuery)
+    this.props.onSearchbarSubmit(this.state.searchQuery)
     this.setState({ searchQuery: '' })
   }
 
@@ -34,7 +34,7 @@ class Searchbar extends Component {
       <SearchbarContainer>
         <header>
           <SearchForm onSubmit={this.handleSubmit}>
-            <SearchFormButton type='submit'>
+            <SearchFormButton onClick={this.props.onResetGallery} type='submit'>
               <SearchFormButtonLabel>Search</SearchFormButtonLabel>
             </SearchFormButton>
 
