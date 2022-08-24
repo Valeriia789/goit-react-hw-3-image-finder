@@ -1,6 +1,8 @@
 // import React from 'react'
 // import axios from 'axios'
 
+// throw new Error() - викликати помилку
+
 // const API_KEY = '19320063-cda7f2d635216fb573107b42d'
 
 // export const getImages = (searchQuery, page) => {
