@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 
 import {
@@ -10,6 +11,11 @@ import {
 } from './Searchbar.styled'
 
 class Searchbar extends Component {
+  static propTypes = {
+    onResetGallery: PropTypes.func.isRequired,
+    onSearchbarSubmit: PropTypes.func.isRequired
+  }
+  
   state = {
     searchQuery: ''
   }

@@ -64,7 +64,7 @@ export default class App extends Component {
     this.setState({ searchQuery })
   }
 
-  loadMore = () => {
+  handleLoadMore = () => {
     this.setState(prevState => ({
       isLoading: true,
       page: prevState.page + 1,
@@ -83,12 +83,12 @@ export default class App extends Component {
 
     return (
       <AppContainer>
-        {error && <ImageErrorView />}
+        {error && <ImageErrorView message={'Ooops, something went wrong'}/>}
         <Searchbar onSearchbarSubmit={this.handleSearchbarSubmit} onResetGallery={this.handleResetGallery}/>
         {isLoading && <Loader />}
         <ImageGallery images={images} />
         {images.length !== 0 && (
-          <LoadMoreBtn isLoading={isLoading} loadMore={this.loadMore} />
+          <LoadMoreBtn isLoading={isLoading} handleLoadMore={this.handleLoadMore} />
         )}
         <ToastContainer autoClose={5000} />
       </AppContainer>
