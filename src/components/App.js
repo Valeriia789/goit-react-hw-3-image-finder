@@ -18,7 +18,7 @@ export default class App extends Component {
     page: 1,
     searchQuery: '',
     isLoading: false,
-    error: null
+    error: false
   }
 
   componentDidUpdate (_, prevState) {
@@ -44,15 +44,12 @@ export default class App extends Component {
           }))
         }
       })
-      .catch((error) => {
-        this.setState({error})
+      .catch(error => {
+        return Promise.reject(
+          new Error(`No images were found for the request ${searchQuery}`)
+        )
       })
-      .finally(() => {})
   }
-
-  // componentDidCatch (error) {
-  //   this.setState({ error })
-  // }
 
   handleSearchbarSubmit = searchQuery => {
     this.setState({ searchQuery })
@@ -73,17 +70,21 @@ export default class App extends Component {
   }
 
   render () {
-    const { images, isLoading, error } = this.state
+    const { searchQuery, images, isLoading, error } = this.state
 
     return (
       <AppContainer>
-        {error && <ImageErrorView message={'Ooops, something went wrong'} />}
+        {error && (
+          <ImageErrorView
+            message={`No images were found for the request ${searchQuery}`}
+          />
+        )}
         <Searchbar
           onSearchbarSubmit={this.handleSearchbarSubmit}
           onResetGallery={this.handleResetGallery}
         />
         {isLoading && <Loader />}
-        <ImageGallery images={images} />
+        <ImageGallery images={images} isLoading={isLoading} error={error} />
         {images.length !== 0 && (
           <LoadMoreBtn
             isLoading={isLoading}
