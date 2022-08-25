@@ -14,7 +14,9 @@ const ImageGallery = ({ images, isLoading, error }) => {
   if (error) {
     return (
       <ImageErrorView
-        message={'Something went wrong, reload the page and try another request'}
+        message={
+          'Something went wrong, reload the page and try another request'
+        }
       />
     )
   }

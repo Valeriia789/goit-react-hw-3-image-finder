@@ -7,8 +7,6 @@ import fetchImages from '../services'
 import Searchbar from './Searchbar/Searchbar'
 import ImageGallery from './ImageGallery/ImageGallery'
 import LoadMoreBtn from './Button/Button'
-import ImageErrorView from './ImageErrorView/ImageErrorView'
-import Loader from './Loader/Loader'
 
 import { AppContainer } from './App.styled'
 
@@ -70,27 +68,24 @@ export default class App extends Component {
   }
 
   render () {
-    const { searchQuery, images, isLoading, error } = this.state
+    const { images, isLoading, error } = this.state
 
     return (
       <AppContainer>
-        {error && (
-          <ImageErrorView
-            message={`No images were found for the request ${searchQuery}`}
-          />
-        )}
         <Searchbar
           onSearchbarSubmit={this.handleSearchbarSubmit}
           onResetGallery={this.handleResetGallery}
         />
-        {isLoading && <Loader />}
+
         <ImageGallery images={images} isLoading={isLoading} error={error} />
+
         {images.length !== 0 && (
           <LoadMoreBtn
             isLoading={isLoading}
             handleLoadMore={this.handleLoadMore}
           />
         )}
+
         <ToastContainer autoClose={5000} />
       </AppContainer>
     )
